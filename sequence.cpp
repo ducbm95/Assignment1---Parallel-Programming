@@ -45,16 +45,16 @@ int main(){
 	int id = 0;
 	if (inputMachine.is_open()){
 		while (getline (inputMachine,line) ){
-			id ++ ;
+			id++ ;
 			vector<string> x = split(line,',');
 			if(x.size() == 2)
 				machines->push_back(new machine(id, resource(stoi(x.at(0)), stoi(x.at(1)))));
 			x.clear();
-											
-	       	}
+	  }
 		inputMachine.close();
 	}
-	else cout << "Unable to open file"; 
+	else
+		cout << "Unable to open file";
 
 	ifstream inputTask ("input/task.txt");
 	id = 0;
@@ -63,13 +63,13 @@ int main(){
 			id ++ ;
 			vector<string> x = split(line,',');
 			if(x.size() == 3)
-				tasks->push_back(new task(id, resource(stoi(x.at(0)), stoi(x.at(1))), stoi(x.at(2))));	
+				tasks->push_back(new task(id, resource(stoi(x.at(0)), stoi(x.at(1))), stoi(x.at(2))));
 			x.clear();
-											
-	       	}
+	  }
 		inputTask.close();
 	}
-	else cout << "Unable to open file"; 
+	else
+		cout << "Unable to open file";
 
 
 	/*Init scheduleObj with generated machines and tasks above*/
@@ -77,7 +77,7 @@ int main(){
 	for (int i = 0 ; i < STEP ; i++){
 		schedule * scheduleObj = new schedule(machines, tasks);
 		scheduleObj->scheduling();
-		schedules.push_back(scheduleObj);	
+		schedules.push_back(scheduleObj);
 	}
 
 	schedule *minSchedule = minOfVector(schedules);

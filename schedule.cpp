@@ -45,7 +45,7 @@ machine::machine(int id, resource Resource){
 	this->remainResource = Resource;
 	allTasks = new vector<task *>();
 	processingTasks = new vector<task *>();
-	waitingTasks = new vector<task *>();	
+	waitingTasks = new vector<task *>();
 }
 
 int machine::getID(){
@@ -79,7 +79,7 @@ int machine::getTimeProcess(){
 	int currentTime = 0;
 	while(waitingTasks->size() > 0){
 		while(waitingTasks->size() > 0 && checkEnoughResource(waitingTasks->at(0))){
-			
+
 			/* Transmit task from wait queue to process queue*/
 			processingTasks->push_back(waitingTasks->at(0));
 			remainResource.CPU -= waitingTasks->at(0)->get_needResource().CPU;
@@ -87,11 +87,11 @@ int machine::getTimeProcess(){
 
 			/* Set end time for transmitted task */
 			waitingTasks->at(0)->set_etime(waitingTasks->at(0)->get_time() + currentTime);
-			
+
 			/* Delete this task from wait queue*/
 			waitingTasks->erase(waitingTasks->begin());
 		}
-			
+
 		/* sort tasks ini processingTasks in ascending order of end time*/
 		sort(processingTasks->begin(),processingTasks->end(), []( task *x, task *y){ return (x->get_etime() < y->get_etime());});
 
@@ -100,15 +100,15 @@ int machine::getTimeProcess(){
 
 		/*Free resource for machine when this task has been finished*/
 		freeResource(processingTasks->at(0));
-		
+
 		/* Remove the finished task into processingTasks queue*/
 		processingTasks->erase(processingTasks->begin());
-	
+
 	}
-	
+
 	/* Get the time that machine finish all tasks*/
 	int time = (processingTasks->size() == 0) ? currentTime : processingTasks->at(processingTasks->size() - 1)->get_etime();
-	
+
 	/* Free process and wait queue*/
 	processingTasks->clear();
 	waitingTasks->clear();
@@ -145,7 +145,7 @@ schedule::schedule(vector<machine *> * machines, vector<task *> * tasks){
 	for (int i = 0 ; i < tasks->size(); i ++)
 		this->tasks->push_back(new task(i, tasks->at(i)->get_needResource(), tasks->at(i)->get_time()));
 
-	random_shuffle(this->machines->begin(), this->machines->end(), myrandom);	       
+	random_shuffle(this->machines->begin(), this->machines->end(), myrandom);
 	random_shuffle(this->tasks->begin(), this->tasks->end(), myrandom);
 
 }
@@ -183,19 +183,29 @@ void schedule::scheduling(){
 	}
 }
 
-void schedule::draw(){
-	//TODO
-	
+void schedule::draw() {
+	for (int i = 0; i < this->machines->size(); i++) {
+		machine *m = this->machines->at(i);
+		cout << "Machine " << m->getID() << "|";
+		cout << "CPU = " << m->get_fullResource().CPU << ", RAM = " << m->get_fullResource().RAM << endl;
+		cout << "\t\t___________________________________________________________________" << endl;
+		for (int j = 0; j < m->allTasks->size(); j++) {
+			task *t = m->allTasks->at(j);
+			int stime = t->get_etime() - t->get_time();
+
+			cout << "Task " << t->getID() << "(" << t->get_needResource().CPU << ", ";
+			cout << t->get_needResource().RAM << ")\t";
+
+			for (int k = 0; k < t->get_etime(); k++) {
+				if (k >= stime) {
+					cout << t->getID();
+				} else {
+					cout << " ";
+				}
+			}
+			cout << endl;
+		}
+		cout << "\t\t___________________________________________________________________" << endl;
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-

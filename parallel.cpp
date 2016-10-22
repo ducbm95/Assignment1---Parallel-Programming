@@ -68,11 +68,11 @@ int main(int argc, char **argv){
 			if(x.size() == 2)
 				machines->push_back(new machine(id, resource(stoi(x.at(0)), stoi(x.at(1)))));
 			x.clear();
-											
+
 	       	}
 		inputMachine.close();
 	}
-	else cout << "Unable to open file"; 
+	else cout << "Unable to open file";
 
 	//tasks
 	ifstream inputTask ("input/task.txt");
@@ -82,13 +82,13 @@ int main(int argc, char **argv){
 			id ++ ;
 			vector<string> x = split(line,',');
 			if(x.size() == 3)
-				tasks->push_back(new task(id, resource(stoi(x.at(0)), stoi(x.at(1))), stoi(x.at(2))));	
+				tasks->push_back(new task(id, resource(stoi(x.at(0)), stoi(x.at(1))), stoi(x.at(2))));
 			x.clear();
-											
+
 	       	}
 		inputTask.close();
 	}
-	else cout << "Unable to open file"; 
+	else cout << "Unable to open file";
 
 
 	/* Each process do scheduling*/
@@ -114,7 +114,7 @@ int main(int argc, char **argv){
 			if (result[i] < min){
 				min = result[i];
 				indexBestProcess = i;
-			}	
+			}
 		}
 
 		/*Send message for requriring the best process draw*/
@@ -123,17 +123,14 @@ int main(int argc, char **argv){
 
 	/* Send bestprocess to all process*/
 	MPI_Bcast(&bestProcess, 1, MPI_INT, 0, MPI_COMM_WORLD);
-	
+
 	if(rank == bestProcess){
 		cout <<"Process "<< rank <<" releases the best result time: "<< minSchedule->timeFinish <<endl;
 		cout <<"Now, visualize the progress by drawing:......... "<<endl;
 		minSchedule->draw();
 	}
-		
-	
+
+
 	MPI_Finalize();
 	return 0;
-
-
-
 }

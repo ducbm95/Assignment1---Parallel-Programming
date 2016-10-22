@@ -50,7 +50,7 @@ public:
 	int getTimeProcess();
 	void freeResource(task *Task);
 	void refreshMachine();
-	
+
 };
 
 class schedule{
@@ -64,15 +64,9 @@ public:
 	/*Choose approriate machine for a task */
 	machine* chooseMachine(task *Task);
 
-	void updateTimeFinish();	
+	void updateTimeFinish();
 	void scheduling();
 
 	void draw();
-	
-
 };
-
-
-
-
 #endif
